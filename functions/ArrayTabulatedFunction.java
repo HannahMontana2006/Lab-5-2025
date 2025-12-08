@@ -266,48 +266,25 @@ public class ArrayTabulatedFunction implements TabulatedFunction, Externalizable
         sb.append("}");
         return sb.toString();
     }
-    public boolean equals(Object o) {
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (!(obj instanceof TabulatedFunction)) return false;
 
-        if (this == o) return true;
-        if (o == null) return false;
+        TabulatedFunction other = (TabulatedFunction) obj;
 
-        if (o instanceof ArrayTabulatedFunction) {
-            ArrayTabulatedFunction f = (ArrayTabulatedFunction) o;
+        if (this.getPointsCount() != other.getPointsCount())
+            return false;
 
-            if (pointsCount != f.pointsCount)
+        for (int i = 0; i < getPointsCount(); i++) {
+            FunctionPoint p1 = this.getPoint(i);
+            FunctionPoint p2 = other.getPoint(i);
+
+            if (!p1.equals(p2))
                 return false;
-
-            for (int i = 0; i < pointsCount; i++) {
-
-                if (Math.abs(point[i].getX() - f.point[i].getX()) > EPSILON)
-                    return false;
-
-                if (Math.abs(point[i].getY() - f.point[i].getY()) > EPSILON)
-                    return false;
-            }
-            return true;
         }
-
-        if (o instanceof TabulatedFunction) {
-            TabulatedFunction f = (TabulatedFunction) o;
-
-            if (pointsCount != f.getPointsCount())
-                return false;
-
-            for (int i = 0; i < pointsCount; i++) {
-
-                if (Math.abs(point[i].getX() - f.getPointX(i)) > EPSILON)
-                    return false;
-
-                if (Math.abs(point[i].getY() - f.getPointY(i)) > EPSILON)
-                    return false;
-            }
-
-            return true;
-        }
-
-        return false;
+        return true;
     }
+
     public int hashCode() {
 
         int hash = pointsCount;

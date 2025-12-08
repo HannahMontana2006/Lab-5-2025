@@ -265,43 +265,32 @@ public class LinkedListTabulatedFunction implements TabulatedFunction, Serializa
         sb.append("}");
         return sb.toString();
     }
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof TabulatedFunction)) return false;
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (!(obj instanceof TabulatedFunction)) return false;
 
-        TabulatedFunction other = (TabulatedFunction) o;
+        TabulatedFunction other = (TabulatedFunction) obj;
 
-        if (this.pointsCount != other.getPointsCount()) return false;
+        if (this.getPointsCount() != other.getPointsCount())
+            return false;
 
-        if (other instanceof LinkedListTabulatedFunction) {
-            LinkedListTabulatedFunction l = (LinkedListTabulatedFunction) other;
+        FunctionNode curr = head.next;
+        int index = 0;
 
-            FunctionNode a = this.head.next;
-            FunctionNode b = l.head.next;
+        while (curr != head) {
+            FunctionPoint p1 = curr.data;
+            FunctionPoint p2 = other.getPoint(index);
 
-            for (int i = 0; i < pointsCount; i++) {
-                if (Math.abs(a.data.getX() - b.data.getX()) > EPSILON) return false;
-                if (Math.abs(a.data.getY() - b.data.getY()) > EPSILON) return false;
+            if (!p1.equals(p2))
+                return false;
 
-                a = a.next;
-                b = b.next;
-            }
-            return true;
-        }
-
-        FunctionNode current = head.next;
-
-        for (int i = 0; i < pointsCount; i++) {
-            FunctionPoint p = other.getPoint(i);
-
-            if (Math.abs(current.data.getX() - p.getX()) > EPSILON) return false;
-            if (Math.abs(current.data.getY() - p.getY()) > EPSILON) return false;
-
-            current = current.next;
+            curr = curr.next;
+            index++;
         }
 
         return true;
     }
+
     public int hashCode() {
         int hash = pointsCount;
 
