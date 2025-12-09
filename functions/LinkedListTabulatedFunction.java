@@ -265,30 +265,45 @@ public class LinkedListTabulatedFunction implements TabulatedFunction, Serializa
         sb.append("}");
         return sb.toString();
     }
-    public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (!(obj instanceof TabulatedFunction)) return false;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null) return false;
 
-        TabulatedFunction other = (TabulatedFunction) obj;
+        if (o instanceof LinkedListTabulatedFunction) {
+            LinkedListTabulatedFunction other = (LinkedListTabulatedFunction) o;
 
-        if (this.getPointsCount() != other.getPointsCount())
-            return false;
+            if (this.pointsCount != other.pointsCount) return false;
 
-        FunctionNode curr = head.next;
-        int index = 0;
+            FunctionNode a = this.head.next;
+            FunctionNode b = other.head.next;
 
-        while (curr != head) {
-            FunctionPoint p1 = curr.data;
-            FunctionPoint p2 = other.getPoint(index);
+            while (a != this.head) {
 
-            if (!p1.equals(p2))
-                return false;
+                if (!a.data.equals(b.data)) return false;
 
-            curr = curr.next;
-            index++;
+                a = a.next;
+                b = b.next;
+            }
+
+            return true;
+        }
+        if (o instanceof ArrayTabulatedFunction) {
+            ArrayTabulatedFunction other = (ArrayTabulatedFunction) o;
+
+            if (this.pointsCount != other.getPointsCount()) return false;
+
+            FunctionNode a = this.head.next;
+
+            for (int i = 0; i < pointsCount; i++) {
+                if (!a.data.equals(other.getPoint(i)))
+                    return false;
+                a = a.next;
+            }
+
+            return true;
         }
 
-        return true;
+        return false;
     }
 
     public int hashCode() {

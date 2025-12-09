@@ -266,25 +266,37 @@ public class ArrayTabulatedFunction implements TabulatedFunction, Externalizable
         sb.append("}");
         return sb.toString();
     }
-    public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (!(obj instanceof TabulatedFunction)) return false;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null) return false;
 
-        TabulatedFunction other = (TabulatedFunction) obj;
+        if (o instanceof ArrayTabulatedFunction) {
+            ArrayTabulatedFunction other = (ArrayTabulatedFunction) o;
 
-        if (this.getPointsCount() != other.getPointsCount())
-            return false;
+            if (this.pointsCount != other.pointsCount) return false;
 
-        for (int i = 0; i < getPointsCount(); i++) {
-            FunctionPoint p1 = this.getPoint(i);
-            FunctionPoint p2 = other.getPoint(i);
-
-            if (!p1.equals(p2))
-                return false;
+            for (int i = 0; i < pointsCount; i++) {
+                if (!this.getPoint(i).equals(other.getPoint(i))) {
+                    return false;
+                }
+            }
+            return true;
         }
-        return true;
-    }
 
+        if (o instanceof LinkedListTabulatedFunction) {
+            LinkedListTabulatedFunction other = (LinkedListTabulatedFunction) o;
+
+            if (this.pointsCount != other.getPointsCount()) return false;
+
+            for (int i = 0; i < pointsCount; i++) {
+                if (!this.getPoint(i).equals(other.getPoint(i)))
+                    return false;
+            }
+            return true;
+        }
+
+        return false;
+    }
     public int hashCode() {
 
         int hash = pointsCount;
